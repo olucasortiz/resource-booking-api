@@ -1,0 +1,41 @@
+{
+  "name": "resource-booking-api",
+  "version": "1.0.0",
+  "description": "Backend API for managing reservations of shared resources (rooms, equipment, courts),\r focused on data consistency, clean architecture and real-world backend practices.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olucasortiz/resource-booking-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/olucasortiz/resource-booking-api/issues"
+  },
+  "homepage": "https://github.com/olucasortiz/resource-booking-api#readme",
+  "dependencies": {
+    "@fastify/swagger": "^9.6.1",
+    "@fastify/swagger-ui": "^5.2.5",
+    "@prisma/client": "^6.19.2",
+    "dotenv": "^17.2.3",
+    "fastify": "^5.7.4",
+    "prisma": "^6.19.2",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
