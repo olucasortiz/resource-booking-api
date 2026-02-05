@@ -1,5 +1,6 @@
 import { ok } from "node:assert";
 import { prisma } from "../../../infra/db/prisma.js";
+import { includes } from "zod";
 
 export class BookingRepository{
     create(data:{userId:string, resourceId:string, startAt:Date, endAt: Date}){
@@ -20,6 +21,24 @@ export class BookingRepository{
 
     findById(id:string){
         return prisma.booking.findUnique({where: {id}})
+    }
+
+    findMany(){
+        return prisma.booking.findMany({orderBy: {startAt: 'desc'}, include: {
+            user:{
+                select:{
+                    id:true, 
+                    name:true
+                }
+            },
+            resource:{
+                select:{
+                    id:true,
+                    name:true, 
+                    type:true
+                }
+            }
+        }})
     }
 
     cancel(id: string){
