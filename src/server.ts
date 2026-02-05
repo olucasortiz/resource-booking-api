@@ -6,7 +6,7 @@ import { resourceRoutes } from '../src/modules/resource/routes/resource-routes.j
 import { bookingRoutes } from '../src/modules/booking/routes/booking-routes.js'
 
 const app = Fastify({
-  logger: true,
+  logger: true, 
 })
 
 function isPrismaP2002(err: unknown): err is { code: string } {
@@ -72,7 +72,13 @@ app.setErrorHandler((error, request, reply) => {
     })
   }
 }
+  if (error instanceof Error && error.message === 'Booking not found') {
+    return reply.status(404).send({ statusCode: 404, error: 'Not Found', message: error.message })
+  }
 
+  if (error instanceof Error && error.message === 'Booking already canceled') {
+    return reply.status(409).send({ statusCode: 409, error: 'Conflict', message: error.message })
+  }
   //  Fallback mais robusto (caso instanceof falhe)
   if (isPrismaP2002(error)) {
     return reply.status(409).send({
@@ -82,7 +88,7 @@ app.setErrorHandler((error, request, reply) => {
     })
   }
 
-  request.log.error({ error }, 'Unhandled error')
+  request.log.error(error)
 
   return reply.status(500).send({
     statusCode: 500,

@@ -5,6 +5,7 @@ export class BookingRepository{
     create(data:{userId:string, resourceId:string, startAt:Date, endAt: Date}){
         return prisma.booking.create({data})
     }
+
     findConflict(params: {resourceId : string, startAt: Date, endAt: Date}){
         const {resourceId, startAt, endAt} = params
         return prisma.booking.findFirst({
@@ -15,5 +16,13 @@ export class BookingRepository{
                 endAt: {gt:startAt} //gt - greater then -  (>)
             }
         })
+    }
+
+    findById(id:string){
+        return prisma.booking.findUnique({where: {id}})
+    }
+
+    cancel(id: string){
+        return prisma.booking.update({where: {id}, data:{status : 'CANCELED'}})
     }
 }
