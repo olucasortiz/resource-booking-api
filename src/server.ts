@@ -2,7 +2,7 @@ import { userRoutes } from './modules/user/routes/user-routes.js'
 import Fastify from 'fastify'
 import { ZodError } from 'zod'
 import { Prisma } from '@prisma/client'
-
+import { resourceRoutes } from '../src/modules/resource/routes/resource-routes.js'
 const app = Fastify({
   logger: true,
 })
@@ -74,5 +74,7 @@ app.listen({ port: 3333 }, () => {
   console.log('🚀 Server running on port 3333')
 })
 
+
 app.register(userRoutes)
 
+app.register(resourceRoutes)
