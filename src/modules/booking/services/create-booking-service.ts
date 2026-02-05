@@ -1,4 +1,4 @@
-import { ResourceRepository } from "../../resource/repositories/ResourceRepository.js";
+import { ResourceRepository } from "../../resource/repositories/resource-repository.js";
 import { UserRepository } from "../../user/repositories/user-repository.js";
 import { BookingRepository } from "../repositories/booking-repository.js";
 import type { CreateBookingInput } from '../schemas/create-booking-schema.js'

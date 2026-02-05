@@ -1,4 +1,4 @@
-import { ResourceRepository } from "../repositories/ResourceRepository.js"
+import { ResourceRepository } from "../repositories/resource-repository.js"
 export class CreateResourceService{
     private resourceRepository = new ResourceRepository()
 

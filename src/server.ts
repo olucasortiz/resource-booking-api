@@ -36,7 +36,7 @@ app.setErrorHandler((error, request, reply) => {
     })
   }
 
-  // ✅ Prisma unique constraint -> 409
+  //  Prisma unique constraint -> 409
   if (
     error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002'
   ) {
@@ -47,7 +47,33 @@ app.setErrorHandler((error, request, reply) => {
     })
   }
 
-  // ✅ Fallback mais robusto (caso instanceof falhe)
+  if (error instanceof Error) {
+  if (error.message === 'Booking time conflict') {
+    return reply.status(409).send({
+      statusCode: 409,
+      error: 'Conflict',
+      message: 'Resource is already booked for this time range',
+    })
+  }
+
+  if (error.message === 'User not found') {
+    return reply.status(404).send({
+      statusCode: 404,
+      error: 'Not Found',
+      message: 'User not found',
+    })
+  }
+
+  if (error.message === 'Resource not found') {
+    return reply.status(404).send({
+      statusCode: 404,
+      error: 'Not Found',
+      message: 'Resource not found',
+    })
+  }
+}
+
+  //  Fallback mais robusto (caso instanceof falhe)
   if (isPrismaP2002(error)) {
     return reply.status(409).send({
       statusCode: 409,
@@ -56,7 +82,6 @@ app.setErrorHandler((error, request, reply) => {
     })
   }
 
-  // ✅ Debug: veja o erro real no terminal
   request.log.error({ error }, 'Unhandled error')
 
   return reply.status(500).send({
