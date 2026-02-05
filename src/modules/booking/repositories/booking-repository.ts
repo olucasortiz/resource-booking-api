@@ -1,0 +1,19 @@
+import { ok } from "node:assert";
+import { prisma } from "../../../infra/db/prisma.js";
+
+export class BookingRepository{
+    create(data:{userId:string, resourceId:string, startAt:Date, endAt: Date}){
+        return prisma.booking.create({data})
+    }
+    findConflict(params: {resourceId : string, startAt: Date, endAt: Date}){
+        const {resourceId, startAt, endAt} = params
+        return prisma.booking.findFirst({
+            where:{
+                resourceId,
+                status: 'CONFIRMED',
+                startAt: {lt:endAt}, //lt - less then -    (<)
+                endAt: {gt:startAt} //gt - greater then -  (>)
+            }
+        })
+    }
+}

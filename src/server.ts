@@ -3,6 +3,8 @@ import Fastify from 'fastify'
 import { ZodError } from 'zod'
 import { Prisma } from '@prisma/client'
 import { resourceRoutes } from '../src/modules/resource/routes/resource-routes.js'
+import { bookingRoutes } from '../src/modules/booking/routes/booking-routes.js'
+
 const app = Fastify({
   logger: true,
 })
@@ -12,7 +14,6 @@ function isPrismaP2002(err: unknown): err is { code: string } {
 }
 
 app.setErrorHandler((error, request, reply) => {
-  // ✅ Zod -> 400
   if (error instanceof ZodError) {
     const issues = error.issues.map((issue) => ({
       field: issue.path.join('.'),
@@ -27,7 +28,6 @@ app.setErrorHandler((error, request, reply) => {
     })
   }
 
-  // ✅ Regra de negócio (service) -> 409
   if (error instanceof Error && error.message === 'User already exists') {
     return reply.status(409).send({
       statusCode: 409,
@@ -78,3 +78,5 @@ app.listen({ port: 3333 }, () => {
 app.register(userRoutes)
 
 app.register(resourceRoutes)
+
+app.register(bookingRoutes)

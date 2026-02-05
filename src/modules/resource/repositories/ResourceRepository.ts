@@ -7,4 +7,9 @@ export class ResourceRepository{
     findMany(){
         return prisma.resource.findMany({orderBy:{createdAt:'desc'}})
     }
+    findById(id : string){
+        return prisma.resource.findUnique({
+            where:{id}
+        })
+    }
 }
