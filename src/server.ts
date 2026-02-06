@@ -2,8 +2,8 @@ import { userRoutes } from './modules/user/routes/user-routes.js'
 import Fastify from 'fastify'
 import { ZodError } from 'zod'
 import { Prisma } from '@prisma/client'
-import { resourceRoutes } from '../src/modules/resource/routes/resource-routes.js'
-import { bookingRoutes } from '../src/modules/booking/routes/booking-routes.js'
+import { resourceRoutes } from './modules/resource/routes/resource-routes.js'
+import { bookingRoutes } from './modules/booking/routes/booking-routes.js'
 import swagger from "@fastify/swagger"
 import swaggerUI from "@fastify/swagger-ui"
 const app = Fastify({
@@ -126,10 +126,8 @@ app.get('/health', async () => {
 
 
 
-try {
-  const address = await app.listen({ port: 3333, host: "127.0.0.1" })
-  console.log(`🚀 Server running at ${address}`)
-} catch (err) {
-  app.log.error(err)
-  process.exit(1)
-}
+const port = Number(process.env.PORT) || 3333
+const host = "0.0.0.0"
+
+const address = await app.listen({ port, host })
+app.log.info(`Server listening at ${address}`)
