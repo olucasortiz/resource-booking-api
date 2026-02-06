@@ -4,10 +4,31 @@ import { ZodError } from 'zod'
 import { Prisma } from '@prisma/client'
 import { resourceRoutes } from '../src/modules/resource/routes/resource-routes.js'
 import { bookingRoutes } from '../src/modules/booking/routes/booking-routes.js'
-
+import swagger from "@fastify/swagger"
+import swaggerUI from "@fastify/swagger-ui"
 const app = Fastify({
   logger: true, 
 })
+
+await app.register(swagger, {
+  openapi: {
+    info: {
+      title: "Resource Booking API",
+      description: "API for managing reservations of shared resources",
+      version: "1.0.0"
+    }
+  }
+})
+
+await app.register(swaggerUI, {
+  routePrefix: "/docs"
+})
+
+app.register(userRoutes)
+
+app.register(resourceRoutes)
+
+app.register(bookingRoutes)
 
 function isPrismaP2002(err: unknown): err is { code: string } {
   return typeof err === 'object' && err !== null && 'code' in err && (err as any).code === 'P2002'
@@ -101,13 +122,14 @@ app.get('/health', async () => {
   return { ok: true }
 })
 
-app.listen({ port: 3333 }, () => {
-  console.log('🚀 Server running on port 3333')
-})
 
 
-app.register(userRoutes)
 
-app.register(resourceRoutes)
 
-app.register(bookingRoutes)
+try {
+  const address = await app.listen({ port: 3333, host: "127.0.0.1" })
+  console.log(`🚀 Server running at ${address}`)
+} catch (err) {
+  app.log.error(err)
+  process.exit(1)
+}
