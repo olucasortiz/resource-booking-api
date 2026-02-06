@@ -19,8 +19,25 @@ export class BookingRepository{
         })
     }
 
-    findById(id:string){
-        return prisma.booking.findUnique({where: {id}})
+    findById(id: string) {
+        return prisma.booking.findUnique({
+        where: { id },
+        include: {
+        user: {
+            select: {
+            id: true,
+            name: true,
+            },
+        },
+        resource: {
+            select: {
+            id: true,
+            name: true,
+            type: true,
+            },
+        },
+        },
+        });
     }
 
     findMany(){
