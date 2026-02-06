@@ -1,4 +1,6 @@
 # Resource Booking API
+This frontend consumes the Resource Booking API:
+https://resource-booking-api-r1cp.onrender.com
 
 Backend API for managing reservations of shared resources (rooms, equipment, courts),
 designed with a strong focus on **data consistency**, **clean architecture** and
