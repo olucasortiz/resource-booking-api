@@ -15,4 +15,8 @@ export class UserRepository{
     create(data:{name:string,email:string}){
         return prisma.user.create({data})
     }
+
+    findMany() {
+        return prisma.user.findMany({ orderBy: { createdAt: "desc" } })
+    }
 }

@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { createUserController } from "../controllers/user-controller.js";
-
+import { listUsersController } from "../controllers/list-user-controller.js";
 export async function userRoutes(app: FastifyInstance){
 app.post(
   "/users",
@@ -37,5 +37,6 @@ app.post(
   },
   createUserController
 )
+app.get("/users", listUsersController)
 
 }
