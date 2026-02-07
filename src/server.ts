@@ -15,10 +15,18 @@ const app = Fastify({
 })
 
 await app.register(cors, {
-  origin: [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-  ],
+  origin: (origin, cb) => {
+    if (!origin) return cb(null, true)
+
+    if (
+      origin.startsWith("http://localhost:") ||
+      origin.startsWith("http://127.0.0.1:")
+    ) return cb(null, true)
+
+    if (origin.endsWith(".vercel.app")) return cb(null, true)
+
+    return cb(new Error("Not allowed by CORS"), false)
+  },
   methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "x-api-key"],
 })

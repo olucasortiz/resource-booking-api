@@ -1,6 +1,4 @@
 # Resource Booking API
-This frontend consumes the Resource Booking API:
-https://resource-booking-api-r1cp.onrender.com
 
 Backend API for managing reservations of shared resources (rooms, equipment, courts),
 designed with a strong focus on **data consistency**, **clean architecture** and
@@ -8,6 +6,14 @@ designed with a strong focus on **data consistency**, **clean architecture** and
 
 This project was built for **learning and portfolio purposes**, prioritizing
 production-oriented decisions over unnecessary complexity.
+
+---
+
+## ✅ Live
+- **API (Render):** https://resource-booking-api-r1cp.onrender.com  
+- **Swagger (OpenAPI):** https://resource-booking-api-r1cp.onrender.com/docs
+
+> Most endpoints require an API key header: `x-api-key`.
 
 ---
 
@@ -48,6 +54,7 @@ A booking conflicts when:
   - Prisma/PostgreSQL ensure persistence and integrity
 - **Soft-cancel strategy**: bookings are never deleted, preserving history and auditability.
 - **UTC-first approach**: all dates are handled in ISO 8601 (UTC).
+- **API Key protection**: endpoints are protected by `x-api-key` (except `/health` and `/docs`).
 
 ---
 
@@ -72,15 +79,36 @@ A booking conflicts when:
 
 ## 🗂️ Architecture
 src/
-└─ modules/
-├─ user/
-├─ resource/
-└─ booking/
-├─ routes
-├─ controllers
-├─ services
-├─ repositories
-└─ schemas
+modules/
+user/
+routes/
+controllers/
+services/
+repositories/
+schemas/
+resource/
+routes/
+controllers/
+services/
+repositories/
+schemas/
+booking/
+routes/
+controllers/
+services/
+repositories/
+schemas/
+shared/
+infra/
+
+
+---
+
+## 🔐 Authentication (API Key)
+All endpoints (except `/health` and `/docs`) require:
+
+**Header**
+x-api-key: <API_KEY>
 
 
 ---
@@ -93,41 +121,74 @@ src/
 
 ### Steps
 ```bash
-git clone https://github.com/your-username/resource-booking-api
+git clone https://github.com/olucasortiz/resource-booking-api
 cd resource-booking-api
 cp .env.example .env
 docker-compose up -d
 npm install
 npx prisma migrate dev
 npm run dev
-📄 API Documentation
-Swagger UI is available at:
 
-http://localhost:3333/docs
-🧪 Manual Testing
-You can test the API using Swagger UI or an API client (Insomnia/Postman).
+Environment variables
+Example .env:
+Create a `.env` file based on `.env.example`:
 
-Recommended flow:
+```env
+PORT=3333
+DATABASE_URL=your_postgres_connection_string
+API_KEY=your_api_key
+NODE_ENV=development
+📄 API Documentation (Swagger)
+Swagger UI:
 
+Local: http://localhost:3333/docs
+
+Production: https://resource-booking-api-r1cp.onrender.com/docs
+
+📌 Endpoints (Summary)
+Health
+
+GET /health
+
+Users
+
+POST /users
+
+GET /users
+
+Resources
+
+POST /resources
+
+GET /resources
+
+Bookings
+
+POST /bookings
+
+GET /bookings
+
+GET /bookings/:id
+
+PATCH /bookings/:id/cancel
+
+🧪 Manual Testing (recommended flow)
 Create a user
 
 Create a resource
 
 Create a booking
 
-Try creating another booking with an overlapping time range
-→ should return a conflict
+Try creating another booking with an overlapping time range → should return 409 Conflict
 
 Cancel the booking
 
-Create a booking for the same time range again
-→ should succeed (only CONFIRMED bookings block)
+Create a booking for the same time range again → should succeed
 
 ☁️ Deployment
-The application is prepared to be deployed using a managed PostgreSQL database
-(e.g. Render).
+This API is deployed on Render using a managed PostgreSQL database.
 
-Prisma migrations are executed during deployment using:
+Migrations are executed during deployment using:
 
 npx prisma migrate deploy
 📌 Notes
